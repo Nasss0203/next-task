@@ -30,7 +30,9 @@ export const login = async ({ email, password }: LoginSchemaType) => {
 	// 	localStorage.setItem("tokens", JSON.stringify(tokens));
 	// }
 	const data = response.data;
-	console.log("data: ", data);
+	localStorage.setItem("tokens", JSON.stringify(data.tokens));
+	localStorage.setItem("users", JSON.stringify(data.data));
+
 	return data;
 };
 

@@ -1,7 +1,7 @@
 "use client";
+import { useUser } from "@/hooks/useUser";
 import { BadgeCheck, LogOut, Settings } from "lucide-react";
 import Link from "next/link";
-import { useState } from "react";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import {
 	DropdownMenu,
@@ -14,16 +14,14 @@ import {
 } from "../ui/dropdown-menu";
 
 const Header = () => {
-	const [auth, setAuth] = useState(false);
+	const { user } = useUser();
 	return (
 		<div className='px-5 py-4 bg-white flex items-center'>
-			<div className='font-bold text-xl text-black mr-20'>
-				Task Management
-			</div>
+			<div></div>
 			<div className='flex items-center justify-between flex-1'>
 				<div></div>
 				<div>
-					{auth ? (
+					{user && user.is_active === true ? (
 						<DropdownMenu>
 							<DropdownMenuTrigger asChild>
 								<div className='flex items-center gap-2 px-1 py-1.5 text-left text-sm cursor-pointer'>
@@ -33,7 +31,9 @@ const Header = () => {
 											CN
 										</AvatarFallback>
 									</Avatar>
-									<span className='font-semibold truncate text-sm leading-tight text-left  hidden md:block'></span>
+									<span className='font-semibold truncate text-sm leading-tight text-left  hidden md:block'>
+										{user.username}
+									</span>
 								</div>
 							</DropdownMenuTrigger>
 							<DropdownMenuContent
@@ -51,7 +51,7 @@ const Header = () => {
 											</AvatarFallback>
 										</Avatar>
 										<span className='font-semibold truncate text-sm leading-tight text-left'>
-											{/* {user.username} */}
+											{user.username}
 										</span>
 									</div>
 								</DropdownMenuLabel>

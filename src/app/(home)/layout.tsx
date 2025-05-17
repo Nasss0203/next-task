@@ -7,11 +7,13 @@ const layout = ({
 	children: React.ReactNode;
 }>) => {
 	return (
-		<div className='flex flex-col mx-auto container'>
-			<Header></Header>
-			<div className='flex h-screen'>
-				<Sidebar></Sidebar>
-				<div className='flex-1 h-screen'>{children}</div>
+		<div className='flex h-screen'>
+			<Sidebar />
+			<div className='flex-1 flex flex-col'>
+				<Header />
+				<main className='flex-1 overflow-auto bg-gray-50 p-6 rounded-md'>
+					{children}
+				</main>
 			</div>
 		</div>
 	);
