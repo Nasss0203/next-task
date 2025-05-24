@@ -1,0 +1,26 @@
+import { getRefreshToken } from "@/utils";
+import axios from "./axios";
+
+export const createAssignments = async ({
+	user_id,
+	task_id,
+}: {
+	user_id: string;
+	task_id: string;
+}) => {
+	const tokens = getRefreshToken();
+	const response = await axios.post(
+		`/api/assignments/`,
+		{
+			user_id,
+			task_id,
+		},
+		{
+			headers: {
+				Authorization: `Bearer ${tokens}`,
+			},
+		},
+	);
+	console.log(" response~", response);
+	return response.data;
+};

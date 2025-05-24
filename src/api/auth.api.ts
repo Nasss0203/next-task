@@ -1,3 +1,4 @@
+import { getRefreshToken } from "@/utils";
 import { LoginSchemaType, RegisterSchemaType } from "@/validator/auth.schema";
 import axios from "./axios";
 
@@ -34,6 +35,22 @@ export const login = async ({ email, password }: LoginSchemaType) => {
 	localStorage.setItem("users", JSON.stringify(data.data));
 
 	return data;
+};
+
+export const fetchAllUSers = async () => {
+	try {
+		const tokens = getRefreshToken();
+		const response = await axios.get("/api/users/list-user/", {
+			headers: {
+				Authorization: `Bearer ${tokens}`,
+			},
+		});
+		const data = response.data;
+
+		return data;
+	} catch (error) {
+		return error;
+	}
 };
 
 // export const logout = async () => {

@@ -1,4 +1,6 @@
 "use client";
+import { fetchAllUSers } from "@/api/auth.api";
+import { QueryKeys } from "@/constants";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 
 const USER_LOCAL_STORAGE_KEY = "users";
@@ -31,5 +33,10 @@ export function useUser() {
 		}
 	};
 
-	return { user, setUser };
+	const { data: fetchUser } = useQuery({
+		queryKey: [QueryKeys.USER, "list-user"],
+		queryFn: async () => fetchAllUSers(),
+	});
+
+	return { user, setUser, fetchUser };
 }

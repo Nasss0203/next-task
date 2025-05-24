@@ -7,7 +7,7 @@ export const TaskSchema = z.object({
 	priority: z.enum(["low", "medium", "high", "urgent"]),
 	due_date: z.date(),
 	status: z.enum(["todo", "doing", "done"]),
-	project: z.null(),
+	projectId: z.string().nullable(),
 });
 
 export type TaskSchemaType = z.infer<typeof TaskSchema>;
