@@ -83,7 +83,7 @@ export const useTasksByUserProjects = (status?: "todo" | "done" | "doing") => {
 	const tokens = getRefreshToken();
 
 	return useQuery({
-		queryKey: [QueryKeys.TASK, "TasksByUserProjects"],
+		queryKey: [QueryKeys.TASK, "TasksByUserProjects", status],
 		enabled: !!listProject && listProject?.length > 0,
 		queryFn: async () => {
 			if (!listProject || listProject?.length === 0) {
@@ -94,7 +94,7 @@ export const useTasksByUserProjects = (status?: "todo" | "done" | "doing") => {
 				listProject.map(async (project: any) => {
 					try {
 						const res = await axios.get(
-							`/api/tasks/project/${project.id}/`,
+							`/api/tasks/projects/${project.id}/`,
 							{
 								params: { status },
 								headers: {
