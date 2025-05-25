@@ -17,6 +17,11 @@ import {
 import { Button } from "../ui/button";
 import { Calendar } from "../ui/calendar";
 import {
+	DropdownMenu,
+	DropdownMenuContent,
+	DropdownMenuTrigger,
+} from "../ui/dropdown-menu";
+import {
 	Form,
 	FormControl,
 	FormField,
@@ -26,7 +31,6 @@ import {
 } from "../ui/form";
 import { Input } from "../ui/input";
 import { Label } from "../ui/label";
-import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
 import { RadioGroup, RadioGroupItem } from "../ui/radio-group";
 import { ScrollArea } from "../ui/scroll-area";
 import {
@@ -191,13 +195,13 @@ const ProjectCreate = () => {
 												<FormLabel>
 													Start Date
 												</FormLabel>
-												<Popover>
-													<PopoverTrigger asChild>
+												<DropdownMenu>
+													<DropdownMenuTrigger
+														asChild
+													>
 														<FormControl>
 															<Button
-																variant={
-																	"outline"
-																}
+																variant='outline'
 																className={cn(
 																	"justify-start text-left font-normal",
 																	!field.value &&
@@ -213,11 +217,8 @@ const ProjectCreate = () => {
 																	: "Pick a date"}
 															</Button>
 														</FormControl>
-													</PopoverTrigger>
-													<PopoverContent
-														className='w-auto p-0'
-														align='start'
-													>
+													</DropdownMenuTrigger>
+													<DropdownMenuContent className='w-auto p-0'>
 														<Calendar
 															mode='single'
 															selected={
@@ -228,25 +229,26 @@ const ProjectCreate = () => {
 															}
 															initialFocus
 														/>
-													</PopoverContent>
-												</Popover>
+													</DropdownMenuContent>
+												</DropdownMenu>
 												<FormMessage />
 											</FormItem>
 										)}
 									/>
+
 									<FormField
 										control={form.control}
 										name='end_date'
 										render={({ field }) => (
 											<FormItem>
 												<FormLabel>End Date</FormLabel>
-												<Popover>
-													<PopoverTrigger asChild>
+												<DropdownMenu>
+													<DropdownMenuTrigger
+														asChild
+													>
 														<FormControl>
 															<Button
-																variant={
-																	"outline"
-																}
+																variant='outline'
 																className={cn(
 																	"justify-start text-left font-normal",
 																	!field.value &&
@@ -262,11 +264,8 @@ const ProjectCreate = () => {
 																	: "Pick a date"}
 															</Button>
 														</FormControl>
-													</PopoverTrigger>
-													<PopoverContent
-														className='w-auto p-0'
-														align='start'
-													>
+													</DropdownMenuTrigger>
+													<DropdownMenuContent className='w-auto p-0'>
 														<Calendar
 															mode='single'
 															selected={
@@ -277,8 +276,8 @@ const ProjectCreate = () => {
 															}
 															initialFocus
 														/>
-													</PopoverContent>
-												</Popover>
+													</DropdownMenuContent>
+												</DropdownMenu>
 												<FormMessage />
 											</FormItem>
 										)}

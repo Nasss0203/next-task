@@ -67,8 +67,6 @@ export const fetchAllTaskForProjects = async ({
 }: {
 	query?: {
 		status?: string;
-		priority?: string;
-		due_date?: any;
 	};
 	id: string;
 }) => {
@@ -83,6 +81,7 @@ export const fetchAllTaskForProjects = async ({
 			},
 		});
 		const data = response.data;
+		console.log(" response~", response);
 
 		return data;
 	} catch (error) {
@@ -99,6 +98,7 @@ export const updateTask = async ({
 	status?: any;
 	priority?: any;
 }) => {
+	console.log(" id~", id);
 	const tokens = getRefreshToken();
 	const response = await axios.put(
 		`api/tasks/update/${id}/`,

@@ -2,43 +2,52 @@
 import { ProjectCreate, ProjectItem } from "@/components/projects";
 import { TaskColumn, TaskCreate, TaskItem } from "@/components/task";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { useUser } from "@/hooks/useUser";
 import { PlusIcon } from "lucide-react";
 import { HiOutlineDotsHorizontal } from "react-icons/hi";
 
 const page = () => {
+	const { user } = useUser();
+	const role = user?.role;
 	return (
 		<div className='flex flex-col gap-5 w-full h-screen'>
-			<div className='flex flex-col gap-5 flex-1 bg-white p-5 rounded-xl shadow-md'>
-				<div className='flex items-center justify-between'>
-					<div className='text-3xl font-bold'>Project</div>
-					<ProjectCreate></ProjectCreate>
+			{role === "admin" || role === "manager" ? (
+				<div className='flex flex-col gap-5 flex-1 bg-white p-5 rounded-xl shadow-md'>
+					<div className='flex items-center justify-between'>
+						<div className='text-3xl font-bold'>Project</div>
+						<ProjectCreate></ProjectCreate>
+					</div>
+					<div className='flex flex-col gap-2 w-full'>
+						<Tabs defaultValue='project' className=''>
+							<TabsList>
+								<TabsTrigger value='project'>
+									Project
+								</TabsTrigger>
+								<TabsTrigger value='todo'>
+									Not Started
+								</TabsTrigger>
+								<TabsTrigger value='active'>
+									In Progress
+								</TabsTrigger>
+								<TabsTrigger value='done'>Done</TabsTrigger>
+							</TabsList>
+							<TabsContent value='project'>
+								<ProjectItem status=''></ProjectItem>
+							</TabsContent>
+							<TabsContent value='todo'>
+								<ProjectItem status='todo'></ProjectItem>
+							</TabsContent>
+							<TabsContent value='active'>
+								<ProjectItem status='active'></ProjectItem>
+							</TabsContent>
+							<TabsContent value='done'>
+								<ProjectItem status='done'></ProjectItem>
+							</TabsContent>
+						</Tabs>
+						<div className='flex flex-col gap-2 w-full'></div>
+					</div>
 				</div>
-				<div className='flex flex-col gap-2 w-full'>
-					<Tabs defaultValue='project' className=''>
-						<TabsList>
-							<TabsTrigger value='project'>Project</TabsTrigger>
-							<TabsTrigger value='todo'>Not Started</TabsTrigger>
-							<TabsTrigger value='active'>
-								In Progress
-							</TabsTrigger>
-							<TabsTrigger value='done'>Done</TabsTrigger>
-						</TabsList>
-						<TabsContent value='project'>
-							<ProjectItem status=''></ProjectItem>
-						</TabsContent>
-						<TabsContent value='todo'>
-							<ProjectItem status='todo'></ProjectItem>
-						</TabsContent>
-						<TabsContent value='active'>
-							<ProjectItem status='active'></ProjectItem>
-						</TabsContent>
-						<TabsContent value='done'>
-							<ProjectItem status='done'></ProjectItem>
-						</TabsContent>
-					</Tabs>
-					<div className='flex flex-col gap-2 w-full'></div>
-				</div>
-			</div>
+			) : null}
 			<div className='flex flex-col gap-5 flex-1 bg-white p-5 rounded-xl shadow-md'>
 				<div className='flex items-center justify-between'>
 					<div className='text-3xl font-bold'>Task</div>

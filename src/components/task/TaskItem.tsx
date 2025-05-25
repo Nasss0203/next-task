@@ -1,21 +1,36 @@
 "use client";
-import { fetchAllTask } from "@/api/task.api";
-import { QueryKeys } from "@/constants";
-import { useQuery } from "@tanstack/react-query";
+import { useGetAllTasks, useTasksByUserProjects } from "@/hooks/useTask";
+import { useUser } from "@/hooks/useUser";
 import TaskDialog from "./TaskDialog";
 
 const TaskItem = ({ status }: { status?: "todo" | "done" | "doing" }) => {
-	const { data } = useQuery({
-		queryKey: [QueryKeys.TASK, status],
-		queryFn: () => fetchAllTask({ query: { status } }),
+	const { user } = useUser();
+	const role = user?.role;
+	const { data } = useGetAllTasks({
+		status,
 	});
-	console.log(`data-TaskItem-${status}`, data);
+
+	// trả về danh sách project
+	const { data: allTasks } = useTasksByUserProjects(status);
+	console.log(`allTasks~${status}`, allTasks);
+
+	let tasks;
+	if (role === "admin" || role === "manager") {
+		tasks = data;
+	} else if (role === "member") {
+		tasks =
+			allTasks?.filter(
+				(task: any) => !status || task.status === status,
+			) || [];
+	} else {
+		tasks = [];
+	}
 
 	return (
 		<>
-			{data && data?.length > 0 ? (
+			{tasks && tasks?.length > 0 ? (
 				<>
-					{data.map((item: any) => (
+					{tasks.map((item: any) => (
 						<TaskDialog
 							priority={item.priority}
 							title={item.title}

@@ -38,6 +38,7 @@ const TaskDialog = ({
 	status: "todo" | "done" | "doing";
 	priority: "low" | "medium" | "high" | "urgent";
 }) => {
+	console.log(" status~", status);
 	const [open, setOpen] = useState(false);
 	const { deleteTaskItem } = useTask();
 	return (

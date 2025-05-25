@@ -1,4 +1,5 @@
 "use client";
+import { useUser } from "@/hooks/useUser";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { FaListUl } from "react-icons/fa";
@@ -7,6 +8,39 @@ import { IoSettingsSharp } from "react-icons/io5";
 import { MdDashboard, MdSms } from "react-icons/md";
 
 const sidebar = [
+	{
+		path: "",
+		name: "Dashboard",
+		icon: <MdDashboard />,
+		roles: ["admin", "manager"],
+	},
+	{
+		path: "list",
+		name: "List",
+		icon: <FaListUl />,
+		roles: ["admin", "manager", "member"],
+	},
+	{
+		path: "task",
+		name: "Task",
+		icon: <GrTasks />,
+		roles: ["admin", "manager", "member"],
+	},
+	{
+		path: "messenger",
+		name: "Messenger",
+		icon: <MdSms />,
+		roles: ["admin", "manager", "member"],
+	},
+	{
+		path: "settings",
+		name: "Settings",
+		icon: <IoSettingsSharp />,
+		roles: ["admin", "manager", "member"],
+	},
+];
+
+const defaultSidebar = [
 	{
 		path: "",
 		name: "Dashboard",
@@ -33,16 +67,24 @@ const sidebar = [
 		icon: <IoSettingsSharp />,
 	},
 ];
+
 const Sidebar = () => {
 	const pathname = usePathname();
+	const { user } = useUser();
+	const role = user?.role;
+
+	// Lọc các mục sidebar dựa trên vai trò của người dùng
+	const filteredSidebar = role
+		? sidebar.filter((item) => item.roles.includes(role)) // Hiển thị mục theo vai trò
+		: defaultSidebar; // Nếu chưa đăng nhập, hiển thị tất cả các mục
 
 	return (
 		<div className='flex flex-col bg-white border-r'>
 			<div className='font-bold text-xl text-black p-5'>
 				Task Management
 			</div>
-			<div className='w-[250px] px-4 py-6 flex flex-col  h-full  shadow'>
-				{sidebar.map((item) => {
+			<div className='w-[250px] px-4 py-6 flex flex-col h-full shadow'>
+				{filteredSidebar.map((item) => {
 					const isActive =
 						pathname === "/" + item.path ||
 						pathname.startsWith("/" + item.path + "/");

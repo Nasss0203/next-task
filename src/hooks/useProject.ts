@@ -3,6 +3,8 @@ import {
 	createProject,
 	deleteProject,
 	fetchAllProject,
+	fetchUserInProject,
+	myProjectUser,
 	Project,
 	updateProject,
 } from "@/api/project.api";
@@ -82,8 +84,6 @@ export function useCreateProject() {
 }
 
 export function useProjectDetail(initStatus?: string, initPriority?: string) {
-	const [statusPopoverOpen, setStatusPopoverOpen] = useState(false);
-	const [priorityPopoverOpen, setPriorityPopoverOpen] = useState(false);
 	const [selectedStatus, setSelectedStatus] = useState(initStatus || "");
 	const [selectedPriority, setSelectedPriority] = useState(
 		initPriority || "",
@@ -98,21 +98,15 @@ export function useProjectDetail(initStatus?: string, initPriority?: string) {
 
 	const handleSelectStatus = (value: string) => {
 		setSelectedStatus(value);
-		setStatusPopoverOpen(false);
 	};
 
 	const handleSelectPriority = (value: string) => {
 		setSelectedPriority(value);
-		setPriorityPopoverOpen(false);
 	};
 
 	return {
-		statusPopoverOpen,
-		setStatusPopoverOpen,
 		selectedStatus,
 		handleSelectStatus,
-		priorityPopoverOpen,
-		setPriorityPopoverOpen,
 		selectedPriority,
 		handleSelectPriority,
 	};
@@ -185,4 +179,25 @@ export function useProject() {
 	});
 
 	return { addMember };
+}
+
+export function useFetchUserInProject({ id }: { id: string }) {
+	const { data: dataUser } = useQuery({
+		queryKey: [QueryKeys.PROJECT, id],
+		queryFn: () => fetchUserInProject({ id }),
+		enabled: !!id,
+	});
+
+	return { dataUser };
+}
+
+export function useMyProjects() {
+	const { user } = useUser();
+	const { data } = useQuery({
+		queryKey: [QueryKeys.PROJECT, user?.id],
+		queryFn: () => myProjectUser(),
+		enabled: !!user?.id,
+	});
+
+	return { data };
 }

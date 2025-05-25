@@ -25,6 +25,11 @@ import {
 import { Button } from "../ui/button";
 import { Calendar } from "../ui/calendar";
 import {
+	DropdownMenu,
+	DropdownMenuContent,
+	DropdownMenuTrigger,
+} from "../ui/dropdown-menu";
+import {
 	Form,
 	FormControl,
 	FormField,
@@ -33,7 +38,6 @@ import {
 	FormMessage,
 } from "../ui/form";
 import { Input } from "../ui/input";
-import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
 import { ScrollArea } from "../ui/scroll-area";
 import {
 	Select,
@@ -317,13 +321,13 @@ const TaskCreate = ({
 										render={({ field }) => (
 											<FormItem>
 												<FormLabel>Date</FormLabel>
-												<Popover>
-													<PopoverTrigger asChild>
+												<DropdownMenu>
+													<DropdownMenuTrigger
+														asChild
+													>
 														<FormControl>
 															<Button
-																variant={
-																	"outline"
-																}
+																variant='outline'
 																className={cn(
 																	"justify-start text-left font-normal",
 																	!field.value &&
@@ -339,11 +343,8 @@ const TaskCreate = ({
 																	: "Pick a date"}
 															</Button>
 														</FormControl>
-													</PopoverTrigger>
-													<PopoverContent
-														className='w-auto p-0'
-														align='start'
-													>
+													</DropdownMenuTrigger>
+													<DropdownMenuContent className='w-auto p-0'>
 														<Calendar
 															mode='single'
 															selected={
@@ -354,8 +355,8 @@ const TaskCreate = ({
 															}
 															initialFocus
 														/>
-													</PopoverContent>
-												</Popover>
+													</DropdownMenuContent>
+												</DropdownMenu>
 												<FormMessage />
 											</FormItem>
 										)}

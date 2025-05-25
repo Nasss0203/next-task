@@ -24,3 +24,14 @@ export const createAssignments = async ({
 	console.log(" response~", response);
 	return response.data;
 };
+
+export const getTaskByAssignmentUser = async ({ id }: { id: string }) => {
+	const tokens = getRefreshToken();
+	const response = await axios.get(`/api/assignments/user/${id}`, {
+		headers: {
+			Authorization: `Bearer ${tokens}`,
+		},
+	});
+	console.log(" response~", response);
+	return response.data;
+};

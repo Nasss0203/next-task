@@ -1,16 +1,9 @@
-import { createAssignments } from "@/api/assignment.api";
-import { fetchUserInProject } from "@/api/project.api";
+import {
+	createAssignments,
+	getTaskByAssignmentUser,
+} from "@/api/assignment.api";
+import { QueryKeys } from "@/constants";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-
-export function useAssignment({ id }: { id: string }) {
-	const queryClient = useQueryClient();
-	const { data: userInProject } = useQuery({
-		queryKey: ["assignments"],
-		queryFn: async () => await fetchUserInProject({ id }),
-	});
-
-	return { userInProject };
-}
 
 export function useCreateAssignment() {
 	const queryClient = useQueryClient();
@@ -24,7 +17,18 @@ export function useCreateAssignment() {
 		}) => await createAssignments({ user_id, task_id }),
 		onSuccess: () => {
 			queryClient.invalidateQueries({ queryKey: ["assignments"] });
+			queryClient.invalidateQueries({ queryKey: [QueryKeys.TASK] });
 		},
 	});
 	return { createAssign };
+}
+
+export function useTaskByAssignmentUser({ id }: { id: string }) {
+	const { data } = useQuery({
+		queryKey: [QueryKeys.PROJECT, id],
+		queryFn: () => getTaskByAssignmentUser({ id }),
+		enabled: !!id,
+	});
+
+	return { data };
 }

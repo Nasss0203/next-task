@@ -14,13 +14,17 @@ import { TaskCreate } from "../task";
 import { Button } from "../ui/button";
 import { Calendar } from "../ui/calendar";
 import {
-	Command,
-	CommandEmpty,
-	CommandGroup,
-	CommandItem,
-	CommandList,
-} from "../ui/command";
-import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
+	DropdownMenu,
+	DropdownMenuContent,
+	DropdownMenuTrigger,
+} from "../ui/dropdown-menu";
+import {
+	Select,
+	SelectContent,
+	SelectItem,
+	SelectTrigger,
+	SelectValue,
+} from "../ui/select";
 
 type Status = {
 	value: string;
@@ -59,12 +63,8 @@ const ProjectDetail = ({
 	name?: string;
 }) => {
 	const {
-		statusPopoverOpen,
-		setStatusPopoverOpen,
 		selectedStatus,
 		handleSelectStatus,
-		priorityPopoverOpen,
-		setPriorityPopoverOpen,
 		selectedPriority,
 		handleSelectPriority,
 	} = useProjectDetail(status, priority);
@@ -73,7 +73,6 @@ const ProjectDetail = ({
 	const { addMember } = useProject();
 
 	const { fetchUser } = useUser();
-	console.log(" fetchUser~", fetchUser);
 
 	const users = fetchUser?.map((user: any) => ({
 		value: user.id,
@@ -87,8 +86,6 @@ const ProjectDetail = ({
 		});
 	};
 
-	console.log("member", members);
-
 	return (
 		<div className='mt-5'>
 			<div className='flex flex-col gap-y-3 '>
@@ -96,122 +93,103 @@ const ProjectDetail = ({
 					<div className='text-base font-medium text-gray-600 w-20'>
 						Status
 					</div>
-					<Popover
-						open={statusPopoverOpen}
-						onOpenChange={setStatusPopoverOpen}
+					<Select
+						onValueChange={(value) => {
+							const selected =
+								statuses.find((s) => s.value === value) || null;
+							if (selected) {
+								updateItem({
+									id,
+									status: selected.value,
+								});
+								handleSelectStatus(selected.value);
+							}
+						}}
 					>
-						<PopoverTrigger asChild>
-							<Button
-								variant={"none"}
-								className={`w-[200px] justify-start   ${
-									selectedStatus === "todo"
-										? "bg-[#B0BEC5] text-[#263238]  "
-										: selectedStatus === "active"
-										? "bg-[#BBDEFB] text-[#1565C0]  "
-										: "bg-[#C8E6C9] text-[#2E7D32]  "
-								}`}
-							>
-								{selectedStatus === "todo"
-									? "Not Started"
+						<SelectTrigger
+							className={`w-[200px] justify-start ${
+								selectedStatus === "todo"
+									? "bg-[#B0BEC5] text-[#263238]"
 									: selectedStatus === "active"
-									? "In Progress"
-									: "Completed"}
-							</Button>
-						</PopoverTrigger>
-						<PopoverContent
-							className='p-0'
-							side='right'
-							align='start'
+									? "bg-[#BBDEFB] text-[#1565C0]"
+									: "bg-[#C8E6C9] text-[#2E7D32]"
+							}`}
 						>
-							<Command>
-								<CommandList>
-									<CommandEmpty>
-										No results found.
-									</CommandEmpty>
-									<CommandGroup>
-										{statuses.map((s) => (
-											<CommandItem
-												key={s.value}
-												value={s.value}
-												onSelect={(value) => {
-													updateItem({
-														id,
-														status: value,
-													});
-													handleSelectStatus(value);
-												}}
-											>
-												{s.label}
-											</CommandItem>
-										))}
-									</CommandGroup>
-								</CommandList>
-							</Command>
-						</PopoverContent>
-					</Popover>
+							<SelectValue
+								placeholder={
+									selectedStatus === "todo"
+										? "Not Started"
+										: selectedStatus === "active"
+										? "In Progress"
+										: selectedStatus === "done"
+										? "Completed"
+										: "Select status..."
+								}
+							/>
+						</SelectTrigger>
+						<SelectContent>
+							{statuses.map((status) => (
+								<SelectItem
+									key={status.value}
+									value={status.value}
+								>
+									{status.label}
+								</SelectItem>
+							))}
+						</SelectContent>
+					</Select>
 				</div>
 
 				<div className='flex items-center gap-5'>
 					<div className='text-base font-medium text-gray-600 w-20'>
 						Priority
 					</div>
-					<Popover
-						open={priorityPopoverOpen}
-						onOpenChange={setPriorityPopoverOpen}
+					<Select
+						onValueChange={(value) => {
+							const selected =
+								priorities.find((p) => p.value === value) ||
+								null;
+							if (selected) {
+								updateItem({
+									id,
+									priority: selected.value,
+								});
+								handleSelectPriority(selected.value);
+							}
+						}}
 					>
-						<PopoverTrigger asChild>
-							<Button
-								variant={"none"}
-								className={`w-[200px] justify-start   ${
-									selectedPriority === "low"
-										? "bg-[#E0F7FA] text-[#00796B] "
-										: selectedPriority === "medium"
-										? "bg-[#FFF9C4] text-[#F57F17] "
-										: "bg-[#FFCDD2] text-[#C62828] "
-								}`}
-							>
-								{selectedPriority === "low"
-									? "Low"
+						<SelectTrigger
+							className={`w-[200px] justify-start ${
+								selectedPriority === "low"
+									? "bg-[#E0F7FA] text-[#00796B]"
 									: selectedPriority === "medium"
-									? "Medium"
-									: "High"}
-							</Button>
-						</PopoverTrigger>
-						<PopoverContent
-							className='p-0'
-							side='right'
-							align='start'
+									? "bg-[#FFF9C4] text-[#F57F17]"
+									: "bg-[#FFCDD2] text-[#C62828]"
+							}`}
 						>
-							<Command>
-								<CommandList>
-									<CommandEmpty>
-										No results found.
-									</CommandEmpty>
-									<CommandGroup>
-										{priorities.map((p) => (
-											<CommandItem
-												key={p.value}
-												value={p.value}
-												onSelect={(value) => {
-													console.log(
-														" value~",
-														value,
-													);
-													updateItem({
-														id,
-														priority: value,
-													});
-													handleSelectPriority(value);
-												}}
-											>
-												{p.label}
-											</CommandItem>
-										))}
-									</CommandGroup>
-								</CommandList>
-							</Command>
-						</PopoverContent>
-					</Popover>
+							<SelectValue
+								placeholder={
+									selectedPriority === "low"
+										? "Low"
+										: selectedPriority === "medium"
+										? "Medium"
+										: selectedPriority === "high"
+										? "High"
+										: "Select priority..."
+								}
+							/>
+						</SelectTrigger>
+						<SelectContent>
+							{priorities.map((priority) => (
+								<SelectItem
+									key={priority.value}
+									value={priority.value}
+								>
+									{priority.label}
+								</SelectItem>
+							))}
+						</SelectContent>
+					</Select>
 				</div>
 				<div className='flex items-center gap-5'>
 					<div className='text-base font-medium text-gray-600 w-20'>
@@ -285,7 +263,10 @@ const ProjectDetail = ({
 						</span>
 						<Combobox
 							items={users || []}
-							onSelect={handleAddMember}
+							onSelect={(userId) => {
+								console.log("Selected User ID:", userId);
+								handleAddMember(userId);
+							}}
 						/>
 					</div>
 				</div>
@@ -295,7 +276,6 @@ const ProjectDetail = ({
 };
 
 export default ProjectDetail;
-
 function DatePicker({
 	from,
 	to,
@@ -319,10 +299,11 @@ function DatePicker({
 			if (onChange) onChange(range);
 		}
 	};
+
 	return (
 		<div className={cn("grid gap-2")}>
-			<Popover>
-				<PopoverTrigger asChild>
+			<DropdownMenu>
+				<DropdownMenuTrigger asChild>
 					<Button
 						id='date'
 						variant={"outline"}
@@ -345,8 +326,8 @@ function DatePicker({
 							<span>Pick a date</span>
 						)}
 					</Button>
-				</PopoverTrigger>
-				<PopoverContent className='w-auto p-0' align='start'>
+				</DropdownMenuTrigger>
+				<DropdownMenuContent className='w-auto p-0'>
 					<Calendar
 						initialFocus
 						mode='range'
@@ -355,8 +336,8 @@ function DatePicker({
 						onSelect={handleSelect} // dùng hàm mới
 						numberOfMonths={2}
 					/>
-				</PopoverContent>
-			</Popover>
+				</DropdownMenuContent>
+			</DropdownMenu>
 		</div>
 	);
 }

@@ -183,3 +183,19 @@ export const fetchUserInProject = async ({ id }: { id: string }) => {
 		return error;
 	}
 };
+
+export const myProjectUser = async () => {
+	try {
+		const tokens = getRefreshToken();
+		const response = await axios.get("api/projects/my-projects/", {
+			headers: {
+				Authorization: `Bearer ${tokens}`,
+			},
+		});
+		const data = response.data;
+
+		return data;
+	} catch (error) {
+		return error;
+	}
+};
