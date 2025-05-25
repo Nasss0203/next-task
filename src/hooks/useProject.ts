@@ -1,9 +1,11 @@
+"use client";
 import {
 	addMemberToProject,
 	createProject,
 	deleteProject,
 	fetchAllProject,
 	fetchUserInProject,
+	getProgressProject,
 	myProjectUser,
 	Project,
 	updateProject,
@@ -195,8 +197,17 @@ export function useMyProjects() {
 	const { user } = useUser();
 	const { data } = useQuery({
 		queryKey: [QueryKeys.PROJECT, user?.id],
-		queryFn: () => myProjectUser(),
+		queryFn: async () => await myProjectUser(),
 		enabled: !!user?.id,
+	});
+
+	return { data };
+}
+
+export function useProgressProject({ id }: { id?: string }) {
+	const { data } = useQuery({
+		queryKey: [QueryKeys.PROJECT, "progress", id],
+		queryFn: async () => await getProgressProject({ id }),
 	});
 
 	return { data };

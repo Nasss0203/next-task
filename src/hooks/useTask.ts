@@ -1,3 +1,4 @@
+"use client";
 import {
 	deleteTask,
 	fetchAllTask,
@@ -63,8 +64,8 @@ export function useGetAllTasksForProject({
 	id,
 	query,
 }: {
-	id: string;
-	query: {
+	id?: string;
+	query?: {
 		status?: any;
 	};
 }) {
@@ -100,10 +101,6 @@ export const useTasksByUserProjects = (status?: "todo" | "done" | "doing") => {
 									Authorization: `Bearer ${tokens}`,
 								},
 							},
-						);
-						console.log(
-							`Tasks for project ${project.id}:`,
-							res.data,
 						);
 						return res.data;
 					} catch (error) {

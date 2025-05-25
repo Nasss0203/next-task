@@ -1,4 +1,5 @@
 "use client";
+
 import { fetchAllUSers } from "@/api/auth.api";
 import { QueryKeys } from "@/constants";
 import { useQuery, useQueryClient } from "@tanstack/react-query";

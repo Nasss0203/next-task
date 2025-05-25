@@ -68,11 +68,11 @@ export const fetchAllTaskForProjects = async ({
 	query?: {
 		status?: string;
 	};
-	id: string;
+	id?: string;
 }) => {
 	try {
 		const tokens = getRefreshToken();
-		const response = await axios.get(`api/tasks/project/${id}`, {
+		const response = await axios.get(`api/tasks/projects/${id}/`, {
 			params: {
 				...query,
 			},

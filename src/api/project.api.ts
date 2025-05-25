@@ -199,3 +199,20 @@ export const myProjectUser = async () => {
 		return error;
 	}
 };
+
+export const getProgressProject = async ({ id }: { id?: string }) => {
+	try {
+		const tokens = getRefreshToken();
+		const response = await axios.get(`api/projects/progress/${id}/`, {
+			headers: {
+				Authorization: `Bearer ${tokens}`,
+			},
+		});
+
+		const data = response.data;
+
+		return data;
+	} catch (error) {
+		return error;
+	}
+};
