@@ -10,8 +10,6 @@ const TableComponent = ({
 }: {
 	status?: "todo" | "done" | "doing" | "";
 }) => {
-	console.log(" status~", status);
-
 	const { user } = useUser();
 	const role = user?.role;
 
@@ -20,17 +18,14 @@ const TableComponent = ({
 
 	let tasks = [];
 	if (role === "admin" || role === "manager") {
-		tasks =
-			allData?.filter((task: any) => !status || task.status === status) ||
-			[];
+		tasks = Array.isArray(allData)
+			? allData.filter((task: any) => !status || task.status === status)
+			: [];
 	} else if (role === "member") {
-		tasks =
-			allTasks?.filter(
-				(task: any) => !status || task.status === status,
-			) || [];
+		tasks = Array.isArray(allTasks)
+			? allTasks.filter((task: any) => !status || task.status === status)
+			: [];
 	}
-
-	console.log("tasks~", tasks);
 
 	return (
 		<div className='container w-full bg-white p-5 rounded-lg shadow-lg'>
@@ -50,7 +45,9 @@ const TableComponent = ({
 					<Plus />
 				</button>
 			</div>
-			<DataTable columns={columns} data={tasks} />
+			<div className='w-full'>
+				<DataTable columns={columns} data={tasks} />
+			</div>
 		</div>
 	);
 };

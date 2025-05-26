@@ -29,21 +29,30 @@ export function DataTable<TData>({ columns, data }: DataTableProps<TData>) {
 	});
 
 	return (
-		<div className='rounded-md border'>
-			<Table>
+		<div className='rounded-md border '>
+			<Table className=''>
 				<TableHeader>
 					{table.getHeaderGroups().map((headerGroup) => (
 						<TableRow key={headerGroup.id}>
-							{headerGroup.headers.map((header) => (
-								<TableHead key={header.id}>
-									{header.isPlaceholder
-										? null
-										: flexRender(
-												header.column.columnDef.header,
-												header.getContext(),
-										  )}
-								</TableHead>
-							))}
+							{headerGroup.headers.map((header) => {
+								const width = (header.column.columnDef as any)
+									.size;
+								return (
+									<TableHead
+										key={header.id}
+										style={{ width }}
+										className='truncate'
+									>
+										{header.isPlaceholder
+											? null
+											: flexRender(
+													header.column.columnDef
+														.header,
+													header.getContext(),
+											  )}
+									</TableHead>
+								);
+							})}
 						</TableRow>
 					))}
 				</TableHeader>
@@ -54,14 +63,22 @@ export function DataTable<TData>({ columns, data }: DataTableProps<TData>) {
 								key={row.id}
 								data-state={row.getIsSelected() && "selected"}
 							>
-								{row.getVisibleCells().map((cell) => (
-									<TableCell key={cell.id}>
-										{flexRender(
-											cell.column.columnDef.cell,
-											cell.getContext(),
-										)}
-									</TableCell>
-								))}
+								{row.getVisibleCells().map((cell) => {
+									const width = (cell.column.columnDef as any)
+										.size;
+									return (
+										<TableCell
+											key={cell.id}
+											style={{ width }}
+											className='truncate'
+										>
+											{flexRender(
+												cell.column.columnDef.cell,
+												cell.getContext(),
+											)}
+										</TableCell>
+									);
+								})}
 							</TableRow>
 						))
 					) : (

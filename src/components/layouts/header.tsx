@@ -1,5 +1,5 @@
 "use client";
-import { useUser } from "@/hooks/useUser";
+import { useLogoutUser, useUser } from "@/hooks/useUser";
 import { BadgeCheck, LogOut, Settings } from "lucide-react";
 import Link from "next/link";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
@@ -15,6 +15,7 @@ import {
 
 const Header = () => {
 	const { user } = useUser();
+	const { handleLogout } = useLogoutUser();
 	return (
 		<div className='px-5 py-4 bg-white flex items-center'>
 			<div></div>
@@ -72,7 +73,7 @@ const Header = () => {
 									</Link>
 								</DropdownMenuGroup>
 								<DropdownMenuSeparator />
-								<DropdownMenuItem>
+								<DropdownMenuItem onClick={handleLogout}>
 									<LogOut />
 									Log out
 								</DropdownMenuItem>

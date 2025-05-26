@@ -28,6 +28,7 @@ export function useTask(options?: { onSuccess?: () => void }) {
 		},
 		onSuccess: () => {
 			queryClient.invalidateQueries({ queryKey: [QueryKeys.TASK] });
+			queryClient.invalidateQueries({ queryKey: [QueryKeys.PROJECT] });
 			queryClient.invalidateQueries({
 				queryKey: [QueryKeys.TASK, "TasksByUserProjects"],
 			});
@@ -41,6 +42,7 @@ export function useTask(options?: { onSuccess?: () => void }) {
 		},
 		onSuccess: () => {
 			queryClient.invalidateQueries({ queryKey: [QueryKeys.TASK] });
+			queryClient.invalidateQueries({ queryKey: [QueryKeys.PROJECT] });
 			options?.onSuccess?.();
 		},
 	});
@@ -91,7 +93,7 @@ export const useTasksByUserProjects = (status?: "todo" | "done" | "doing") => {
 			}
 
 			const taskResponses = await Promise.all(
-				listProject.map(async (project: any) => {
+				listProject?.map(async (project: any) => {
 					try {
 						const res = await axios.get(
 							`/api/tasks/projects/${project.id}/`,

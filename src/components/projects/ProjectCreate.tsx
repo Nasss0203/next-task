@@ -46,9 +46,8 @@ const ProjectCreate = () => {
 	const { form, onSubmit } = useCreateProject();
 	return (
 		<AlertDialog>
-			<AlertDialogTrigger className='flex items-center gap-1 border border-neutral-500 p-2 rounded-md'>
+			<AlertDialogTrigger className='flex items-center cursor-pointer border border-neutral-500 p-2 rounded-md'>
 				<PlusIcon className='size-5' />
-				<span className='text-base'>Create Task</span>
 			</AlertDialogTrigger>
 			<AlertDialogContent>
 				<ScrollArea className='lg:h-[85vh] 2xl:h-auto w-full'>
@@ -143,7 +142,7 @@ const ProjectCreate = () => {
 															</SelectTrigger>
 														</FormControl>
 														<SelectContent>
-															{statusProject.map(
+															{statusProject?.map(
 																(item) => (
 																	<SelectItem
 																		key={

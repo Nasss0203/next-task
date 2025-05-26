@@ -2,6 +2,7 @@
 import {
 	addMemberToProject,
 	createProject,
+	deleteMemberFromProject,
 	deleteProject,
 	fetchAllProject,
 	fetchUserInProject,
@@ -161,6 +162,7 @@ export function useProjectDelete() {
 		mutationFn: async ({ id }: { id: string }) => deleteProject({ id }),
 		onSuccess: () => {
 			queryClient.invalidateQueries({ queryKey: [QueryKeys.PROJECT] });
+			queryClient.invalidateQueries({ queryKey: [QueryKeys.TASK] });
 		},
 	});
 
@@ -180,10 +182,22 @@ export function useProject() {
 		},
 	});
 
-	return { addMember };
+	const { mutate: deleteMember } = useMutation({
+		mutationFn: async ({ id, user_id }: { id?: string; user_id?: any }) => {
+			await deleteMemberFromProject({ id, user_id });
+		},
+		onSuccess: () => {
+			queryClient.invalidateQueries({ queryKey: [QueryKeys.TASK] });
+			queryClient.invalidateQueries({ queryKey: [QueryKeys.PROJECT] });
+			queryClient.invalidateQueries({ queryKey: ["users"] });
+			queryClient.invalidateQueries({ queryKey: ["assignments"] });
+		},
+	});
+
+	return { addMember, deleteMember };
 }
 
-export function useFetchUserInProject({ id }: { id: string }) {
+export function useFetchUserInProject({ id }: { id?: string }) {
 	const { data: dataUser } = useQuery({
 		queryKey: [QueryKeys.PROJECT, id],
 		queryFn: () => fetchUserInProject({ id }),

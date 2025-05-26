@@ -23,7 +23,7 @@ const ProjectItem = ({
 		<div className='grid lg:grid-cols-5 2xl:grid-cols-7 gap-3  '>
 			{dataProject && dataProject?.length > 0 ? (
 				<>
-					{dataProject.map((items: Project) => (
+					{dataProject?.map((items: Project) => (
 						<ProjectDialog
 							id={items.id}
 							key={items.id}

@@ -270,7 +270,7 @@ const TaskCreate = ({
 																	{dataProject &&
 																		dataProject.length >
 																			0 &&
-																		dataProject.map(
+																		dataProject?.map(
 																			(
 																				item: any,
 																			) => (

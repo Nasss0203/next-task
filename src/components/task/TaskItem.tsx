@@ -25,6 +25,7 @@ const TaskItem = ({ status }: { status?: "todo" | "done" | "doing" }) => {
 	} else {
 		tasks = [];
 	}
+	console.log(" tasks~", tasks);
 
 	return (
 		<>
@@ -49,32 +50,15 @@ const TaskItem = ({ status }: { status?: "todo" | "done" | "doing" }) => {
 										<div></div>
 									</div>
 									<div className='flex flex-wrap gap-1 text-xs'>
-										<span className='bg-gray-200 px-2 py-0.5 rounded'>
-											Label
-										</span>
-										<span className='bg-gray-200 px-2 py-0.5 rounded'>
-											Label
-										</span>
+										{item.priority}
 									</div>
 									<hr />
 									<div className='flex justify-between items-center text-sm text-gray-500'>
 										<div className='flex -space-x-2'>
-											<img
-												className='w-6 h-6 rounded-full border-2 border-white'
-												src='https://via.placeholder.com/24'
-											/>
-											<img
-												className='w-6 h-6 rounded-full border-2 border-white'
-												src='https://via.placeholder.com/24'
-											/>
-											<img
-												className='w-6 h-6 rounded-full border-2 border-white'
-												src='https://via.placeholder.com/24'
-											/>
-										</div>
-										<div className='flex items-center gap-2'>
-											<span>📎 3</span>
-											<span>💬 1</span>
+											{item.assigned_users?.length > 0
+												? item.assigned_users?.length
+												: 0}
+											{` `}members
 										</div>
 									</div>
 								</div>

@@ -53,27 +53,30 @@ export const fetchAllUSers = async () => {
 	}
 };
 
-// export const logout = async () => {
-// 	try {
-// 		const refreshToken = getRefreshToken();
-// 		const response = await axios.post(
-// 			"/auth/logout",
-// 			{},
-// 			{
-// 				headers: {
-// 					Authorization: `Bearer ${refreshToken}`,
-// 				},
-// 			},
-// 		);
+export const logout = async ({ refresh }: { refresh: string }) => {
+	try {
+		const refreshToken = getRefreshToken();
+		const response = await axios.post(
+			"api/users/logout/",
+			{
+				refresh,
+			},
+			{
+				headers: {
+					Authorization: `Bearer ${refreshToken}`,
+				},
+			},
+		);
 
-// 		if (response) {
-// 			localStorage.removeItem("auth");
-// 			localStorage.removeItem("tokens");
-// 		}
+		if (typeof window !== "undefined") {
+			localStorage.removeItem("users");
+			localStorage.removeItem("tokens");
+		}
+		console.log(" response~", response);
 
-// 		return response;
-// 	} catch (error) {
-// 		console.error("Error during log out:", error);
-// 		throw error;
-// 	}
-// };
+		return response;
+	} catch (error) {
+		console.error("Error during log out:", error);
+		throw error;
+	}
+};

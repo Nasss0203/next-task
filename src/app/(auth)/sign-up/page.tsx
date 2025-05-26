@@ -14,11 +14,13 @@ import { Input } from "@/components/ui/input";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation } from "@tanstack/react-query";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { z } from "zod";
 
 const SignUp = () => {
+	const router = useRouter();
 	const formSchema = z.object({
 		username: z.string().min(2).max(50),
 		email: z.string().email(),
@@ -37,7 +39,7 @@ const SignUp = () => {
 	const mutation = useMutation({
 		mutationFn: (values: any) => register(values),
 		onSuccess: (data: any) => {
-			form.reset();
+			router.push("/");
 		},
 		onError: (error) => {
 			console.error("Đăng ký thất bại:", error);

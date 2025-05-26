@@ -148,7 +148,7 @@ export const addMemberToProject = async ({
 	user_id,
 }: {
 	id: string;
-	user_id: any;
+	user_id: string;
 }) => {
 	const tokens = getRefreshToken();
 	const response = await axios.post(
@@ -168,7 +168,7 @@ export const addMemberToProject = async ({
 	return data;
 };
 
-export const fetchUserInProject = async ({ id }: { id: string }) => {
+export const fetchUserInProject = async ({ id }: { id?: string }) => {
 	try {
 		const tokens = getRefreshToken();
 		const response = await axios.get(`api/projects/members/${id}/`, {
@@ -208,6 +208,34 @@ export const getProgressProject = async ({ id }: { id?: string }) => {
 				Authorization: `Bearer ${tokens}`,
 			},
 		});
+
+		const data = response.data;
+
+		return data;
+	} catch (error) {
+		return error;
+	}
+};
+
+export const deleteMemberFromProject = async ({
+	id,
+	user_id,
+}: {
+	id?: string;
+	user_id?: string;
+}) => {
+	try {
+		const tokens = getRefreshToken();
+		const response = await axios.post(
+			`api/projects/remove-member/${id}/`,
+			{ user_id },
+			{
+				headers: {
+					Authorization: `Bearer ${tokens}`,
+				},
+			},
+		);
+		console.log(" response~", response);
 
 		const data = response.data;
 

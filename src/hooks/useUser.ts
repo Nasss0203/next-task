@@ -1,8 +1,8 @@
 "use client";
 
-import { fetchAllUSers } from "@/api/auth.api";
+import { fetchAllUSers, logout } from "@/api/auth.api";
 import { QueryKeys } from "@/constants";
-import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
 const USER_LOCAL_STORAGE_KEY = "users";
 
@@ -40,4 +40,41 @@ export function useUser() {
 	});
 
 	return { user, setUser, fetchUser };
+}
+export function useLogoutUser() {
+	const queryClient = useQueryClient();
+
+	let parsedTokens: { refresh: string } | null = null;
+
+	if (typeof window !== "undefined") {
+		const tokens = localStorage.getItem("tokens");
+		parsedTokens = tokens ? JSON.parse(tokens) : null;
+	}
+
+	const mutation = useMutation({
+		mutationFn: async () => {
+			if (!parsedTokens?.refresh) {
+				throw new Error("No refresh token available");
+			}
+			await logout({ refresh: parsedTokens.refresh });
+		},
+		onSuccess: () => {
+			queryClient.invalidateQueries({ queryKey: ["users"] });
+			queryClient.invalidateQueries({ queryKey: [QueryKeys.TASK] });
+			queryClient.invalidateQueries({ queryKey: [QueryKeys.PROJECT] });
+		},
+		onError: (error) => {
+			console.error("Logout failed:", error);
+		},
+	});
+
+	const handleLogout = async () => {
+		try {
+			await mutation.mutateAsync();
+		} catch (error) {
+			console.error("Error during logout:", error);
+		}
+	};
+
+	return { handleLogout };
 }

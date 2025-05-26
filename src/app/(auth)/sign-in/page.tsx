@@ -11,14 +11,18 @@ import {
 	FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { useUser } from "@/hooks/useUser";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation } from "@tanstack/react-query";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { z } from "zod";
 
 const SignIn = () => {
+	const router = useRouter();
+	const { user } = useUser();
 	const formSchema = z.object({
 		email: z.string().email(),
 		password: z.string().min(8),
@@ -35,9 +39,16 @@ const SignIn = () => {
 	const mutation = useMutation({
 		mutationFn: (values: any) => login(values),
 		onSuccess: (data: any) => {
-			console.log("data: ", data);
+			console.log("data: ", data.data.role);
 			toast.success(data.message);
-			form.reset();
+
+			const role = data?.data?.role;
+
+			if (role === "admin" || role === "manager") {
+				router.push("/");
+			} else if (role === "member") {
+				router.push("/list");
+			}
 		},
 		onError: (error) => {
 			console.error("Đăng ký thất bại:", error);
@@ -46,7 +57,6 @@ const SignIn = () => {
 	});
 
 	function onSubmit(values: z.infer<typeof formSchema>) {
-		console.log("values: ", values);
 		mutation.mutate(values);
 	}
 	return (
