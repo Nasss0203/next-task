@@ -25,6 +25,8 @@ import {
 	useProgressProject,
 } from "@/hooks/useProject";
 import { useGetAllTasksForProject } from "@/hooks/useTask";
+import { useUser } from "@/hooks/useUser";
+import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { FaCheckCircle } from "react-icons/fa";
 import { FaCircleDot } from "react-icons/fa6";
@@ -32,6 +34,9 @@ import { GrTasks } from "react-icons/gr";
 import { MdDoNotDisturbOn } from "react-icons/md";
 
 export default function Home() {
+	const router = useRouter();
+	const { user } = useUser();
+
 	const [projectId, setProjectId] = useState<string | undefined>(undefined);
 	const [taskId, setTaskId] = useState<string | undefined>(undefined);
 	const [open, setOpen] = useState(false);
@@ -68,6 +73,13 @@ export default function Home() {
 			setTaskId(taskForProject[0].id);
 		}
 	}, [taskForProject, taskId]);
+
+	useEffect(() => {
+		if (user?.role === "member") {
+			router.replace("/unauthorized");
+		}
+	}, [user]);
+
 	return (
 		<div className='flex flex-col gap-5'>
 			<div className='bg-white shadow-xl p-5 rounded-xl flex flex-col gap-5'>

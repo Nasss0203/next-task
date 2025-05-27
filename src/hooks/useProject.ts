@@ -52,7 +52,6 @@ export function useCreateProject() {
 			start_date: new Date(),
 			status: "todo",
 			tasks: [],
-			is_personal: false,
 		},
 	});
 

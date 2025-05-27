@@ -1,7 +1,6 @@
 "use client";
 import { useGetAllTasks, useTasksByUserProjects } from "@/hooks/useTask";
 import { useUser } from "@/hooks/useUser";
-import { Plus } from "lucide-react";
 import { DataTable } from "./DataTable";
 import { columns } from "./columns";
 
@@ -41,9 +40,6 @@ const TableComponent = ({
 					{` `}
 					<span className='text-gray-500'>({tasks.length})</span>
 				</h2>
-				<button className='text-blue-500 hover:underline'>
-					<Plus />
-				</button>
 			</div>
 			<div className='w-full'>
 				<DataTable columns={columns} data={tasks} />

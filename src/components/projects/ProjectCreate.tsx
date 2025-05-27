@@ -30,8 +30,6 @@ import {
 	FormMessage,
 } from "../ui/form";
 import { Input } from "../ui/input";
-import { Label } from "../ui/label";
-import { RadioGroup, RadioGroupItem } from "../ui/radio-group";
 import { ScrollArea } from "../ui/scroll-area";
 import {
 	Select,
@@ -277,52 +275,6 @@ const ProjectCreate = () => {
 														/>
 													</DropdownMenuContent>
 												</DropdownMenu>
-												<FormMessage />
-											</FormItem>
-										)}
-									/>
-									<FormField
-										control={form.control}
-										name='is_personal'
-										render={({ field }) => (
-											<FormItem>
-												<FormLabel>
-													Is Personal
-												</FormLabel>
-												<FormControl>
-													<RadioGroup
-														value={field.value?.toString()} // Chuyển boolean thành string
-														onValueChange={(
-															value,
-														) =>
-															field.onChange(
-																value ===
-																	"true",
-															)
-														} // Chuyển string thành boolean
-													>
-														<div className='flex items-center space-x-4'>
-															<div className='flex items-center space-x-2'>
-																<RadioGroupItem
-																	value='true'
-																	id='is_personal_yes'
-																/>
-																<Label htmlFor='is_personal_yes'>
-																	Yes
-																</Label>
-															</div>
-															<div className='flex items-center space-x-2'>
-																<RadioGroupItem
-																	value='false'
-																	id='is_personal_no'
-																/>
-																<Label htmlFor='is_personal_no'>
-																	No
-																</Label>
-															</div>
-														</div>
-													</RadioGroup>
-												</FormControl>
 												<FormMessage />
 											</FormItem>
 										)}

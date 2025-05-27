@@ -4,8 +4,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { FaListUl } from "react-icons/fa";
 import { GrTasks } from "react-icons/gr";
-import { IoSettingsSharp } from "react-icons/io5";
-import { MdDashboard, MdSms } from "react-icons/md";
+import { MdDashboard } from "react-icons/md";
 
 const sidebar = [
 	{
@@ -26,18 +25,6 @@ const sidebar = [
 		icon: <GrTasks />,
 		roles: ["admin", "manager", "member"],
 	},
-	{
-		path: "messenger",
-		name: "Messenger",
-		icon: <MdSms />,
-		roles: ["admin", "manager", "member"],
-	},
-	{
-		path: "settings",
-		name: "Settings",
-		icon: <IoSettingsSharp />,
-		roles: ["admin", "manager", "member"],
-	},
 ];
 
 const defaultSidebar = [
@@ -56,16 +43,6 @@ const defaultSidebar = [
 		name: "Task",
 		icon: <GrTasks />,
 	},
-	{
-		path: "messenger",
-		name: "Messenger",
-		icon: <MdSms />,
-	},
-	{
-		path: "settings",
-		name: "Settings",
-		icon: <IoSettingsSharp />,
-	},
 ];
 
 const Sidebar = () => {
@@ -73,10 +50,9 @@ const Sidebar = () => {
 	const { user } = useUser();
 	const role = user?.role;
 
-	// Lọc các mục sidebar dựa trên vai trò của người dùng
 	const filteredSidebar = role
-		? sidebar.filter((item) => item.roles.includes(role)) // Hiển thị mục theo vai trò
-		: defaultSidebar; // Nếu chưa đăng nhập, hiển thị tất cả các mục
+		? sidebar.filter((item) => item.roles.includes(role))
+		: defaultSidebar;
 
 	return (
 		<div className='flex flex-col bg-white border-r'>

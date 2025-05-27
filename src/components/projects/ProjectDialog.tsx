@@ -3,6 +3,17 @@ import { Trash2 } from "lucide-react";
 import { ReactNode } from "react";
 import { BsThreeDots } from "react-icons/bs";
 import {
+	AlertDialog,
+	AlertDialogAction,
+	AlertDialogCancel,
+	AlertDialogContent,
+	AlertDialogDescription,
+	AlertDialogFooter,
+	AlertDialogHeader,
+	AlertDialogTitle,
+	AlertDialogTrigger,
+} from "../ui/alert-dialog";
+import {
 	Dialog,
 	DialogContent,
 	DialogDescription,
@@ -65,13 +76,35 @@ const ProjectDialog = ({
 						<BsThreeDots />
 					</PopoverTrigger>
 					<PopoverContent className='w-[100px] p-1 cursor-pointer'>
-						<div
-							className='flex items-center gap-1 cursor-pointer text-sm'
-							onClick={() => deleteItem({ id })}
-						>
-							<Trash2 className='size-4' />
-							<span>Delete</span>
-						</div>
+						<AlertDialog>
+							<AlertDialogTrigger className='cursor-pointer flex items-center gap-1 text-xs'>
+								<Trash2 className='size-4' />
+								<span>Delete</span>
+							</AlertDialogTrigger>
+							<AlertDialogContent>
+								<AlertDialogHeader>
+									<AlertDialogTitle>
+										Are you absolutely sure?
+									</AlertDialogTitle>
+									<AlertDialogDescription>
+										Deleting this project is permanent and
+										cannot be undone.
+									</AlertDialogDescription>
+								</AlertDialogHeader>
+								<AlertDialogFooter>
+									<AlertDialogCancel>
+										Cancel
+									</AlertDialogCancel>
+									<AlertDialogAction
+										onClick={() => {
+											deleteItem({ id });
+										}}
+									>
+										Delete
+									</AlertDialogAction>
+								</AlertDialogFooter>
+							</AlertDialogContent>
+						</AlertDialog>
 					</PopoverContent>
 				</Popover>
 			</div>

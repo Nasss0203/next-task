@@ -1,8 +1,20 @@
 'use client";';
 import { useTask } from "@/hooks/useTask";
+import { useUser } from "@/hooks/useUser";
 import { Trash2 } from "lucide-react";
 import { ReactNode, useState } from "react";
 import { BsThreeDots } from "react-icons/bs";
+import {
+	AlertDialog,
+	AlertDialogAction,
+	AlertDialogCancel,
+	AlertDialogContent,
+	AlertDialogDescription,
+	AlertDialogFooter,
+	AlertDialogHeader,
+	AlertDialogTitle,
+	AlertDialogTrigger,
+} from "../ui/alert-dialog";
 import {
 	Dialog,
 	DialogContent,
@@ -39,6 +51,7 @@ const TaskDialog = ({
 	priority: "low" | "medium" | "high" | "urgent";
 }) => {
 	console.log(" status~", status);
+	const { user } = useUser();
 	const [open, setOpen] = useState(false);
 	const { deleteTaskItem } = useTask();
 	return (
@@ -65,22 +78,46 @@ const TaskDialog = ({
 					</DialogHeader>
 				</DialogContent>
 			</Dialog>
-			<div className=' absolute top-0 right-0 px-2 py-1 cursor-pointer'>
-				<Popover>
-					<PopoverTrigger>
-						<BsThreeDots />
-					</PopoverTrigger>
-					<PopoverContent className='w-[100px] p-1 cursor-pointer'>
-						<div
-							className='flex items-center gap-1 cursor-pointer text-sm'
-							onClick={() => deleteTaskItem(id)}
-						>
-							<Trash2 className='size-4' />
-							<span>Delete</span>
-						</div>
-					</PopoverContent>
-				</Popover>
-			</div>
+			{user?.role === "admin" || user?.role === "manager" ? (
+				<div className=' absolute top-0 right-0 px-2 py-1 cursor-pointer'>
+					<Popover>
+						<PopoverTrigger>
+							<BsThreeDots />
+						</PopoverTrigger>
+						<PopoverContent className='w-[100px] p-1 cursor-pointer'>
+							<AlertDialog>
+								<AlertDialogTrigger className='cursor-pointer flex items-center gap-1 text-xs'>
+									<Trash2 className='size-4' />
+									<span>Delete</span>
+								</AlertDialogTrigger>
+								<AlertDialogContent>
+									<AlertDialogHeader>
+										<AlertDialogTitle>
+											Are you absolutely sure?
+										</AlertDialogTitle>
+										<AlertDialogDescription>
+											This will permanently delete the
+											task.
+										</AlertDialogDescription>
+									</AlertDialogHeader>
+									<AlertDialogFooter>
+										<AlertDialogCancel>
+											Cancel
+										</AlertDialogCancel>
+										<AlertDialogAction
+											onClick={() => {
+												deleteTaskItem(id);
+											}}
+										>
+											Delete
+										</AlertDialogAction>
+									</AlertDialogFooter>
+								</AlertDialogContent>
+							</AlertDialog>
+						</PopoverContent>
+					</Popover>
+				</div>
+			) : null}
 		</div>
 	);
 };

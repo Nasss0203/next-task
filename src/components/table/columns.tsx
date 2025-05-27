@@ -3,6 +3,19 @@
 import { useDeleteAssignment } from "@/hooks/useAssignment";
 import { useProject } from "@/hooks/useProject";
 import { ColumnDef } from "@tanstack/react-table";
+import { Trash } from "lucide-react";
+import { toast } from "sonner";
+import {
+	AlertDialog,
+	AlertDialogAction,
+	AlertDialogCancel,
+	AlertDialogContent,
+	AlertDialogDescription,
+	AlertDialogFooter,
+	AlertDialogHeader,
+	AlertDialogTitle,
+	AlertDialogTrigger,
+} from "../ui/alert-dialog";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 
 export type Task = {
@@ -135,17 +148,38 @@ export const memberColumnsTaskUser = (taskId: string): ColumnDef<Member>[] => [
 
 			return (
 				<div className='flex space-x-2'>
-					<button
-						className='text-red-500 hover:underline'
-						onClick={() =>
-							deleteAssign({
-								user_id: user.id,
-								task_id: taskId,
-							})
-						}
-					>
-						Delete
-					</button>
+					<AlertDialog>
+						<AlertDialogTrigger className='cursor-pointer'>
+							<Trash size={14} />
+						</AlertDialogTrigger>
+						<AlertDialogContent>
+							<AlertDialogHeader>
+								<AlertDialogTitle>
+									Are you absolutely sure?
+								</AlertDialogTitle>
+								<AlertDialogDescription>
+									This action cannot be undone. This will
+									permanently remove the assignment.
+								</AlertDialogDescription>
+							</AlertDialogHeader>
+							<AlertDialogFooter>
+								<AlertDialogCancel>Cancel</AlertDialogCancel>
+								<AlertDialogAction
+									onClick={() => {
+										deleteAssign({
+											user_id: user.id,
+											task_id: taskId,
+										});
+										toast.success(
+											"Assignment deleted successfully!",
+										);
+									}}
+								>
+									Delete
+								</AlertDialogAction>
+							</AlertDialogFooter>
+						</AlertDialogContent>
+					</AlertDialog>
 				</div>
 			);
 		},
@@ -183,17 +217,39 @@ export const memberColumnsUser = (projectId?: string): ColumnDef<Member>[] => [
 
 			return (
 				<div className='flex space-x-2'>
-					<button
-						className='text-red-500 hover:underline'
-						onClick={() =>
-							deleteMember({
-								id: projectId,
-								user_id: user.id,
-							})
-						}
-					>
-						Delete
-					</button>
+					<AlertDialog>
+						<AlertDialogTrigger className='cursor-pointer'>
+							<Trash size={14} />
+						</AlertDialogTrigger>
+						<AlertDialogContent>
+							<AlertDialogHeader>
+								<AlertDialogTitle>
+									Are you absolutely sure?
+								</AlertDialogTitle>
+								<AlertDialogDescription>
+									This action cannot be undone. This will
+									permanently remove the member from the
+									project.
+								</AlertDialogDescription>
+							</AlertDialogHeader>
+							<AlertDialogFooter>
+								<AlertDialogCancel>Cancel</AlertDialogCancel>
+								<AlertDialogAction
+									onClick={() => {
+										deleteMember({
+											id: projectId,
+											user_id: user.id,
+										});
+										toast.success(
+											"Member removed from project successfully!",
+										);
+									}}
+								>
+									Delete
+								</AlertDialogAction>
+							</AlertDialogFooter>
+						</AlertDialogContent>
+					</AlertDialog>
 				</div>
 			);
 		},

@@ -50,8 +50,23 @@ const TaskItem = ({ status }: { status?: "todo" | "done" | "doing" }) => {
 										<div></div>
 									</div>
 									<div className='flex flex-wrap gap-1 text-xs'>
-										{item.priority}
+										<span
+											className={`px-2 py-1 rounded-full font-semibold
+			${
+				item.priority === "low"
+					? "bg-green-100 text-green-800"
+					: item.priority === "medium"
+					? "bg-yellow-100 text-yellow-800"
+					: item.priority === "high"
+					? "bg-red-100 text-red-800"
+					: "bg-gray-100 text-gray-800"
+			}
+		`}
+										>
+											{item.priority}
+										</span>
 									</div>
+
 									<hr />
 									<div className='flex justify-between items-center text-sm text-gray-500'>
 										<div className='flex -space-x-2'>
